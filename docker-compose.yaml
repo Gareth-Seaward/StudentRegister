@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+
+  mongo:
+    image: mongo
+    volumes:
+      - data:/data/db
+    env_file:
+      - ./Mongo/Env/mongoDb.env
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    env_file: 
+      - ./Mongo/Env/mongoExpress.env
+    depends_on:
+      - mongo
+
+  api:
+    build: 
+      context: ./Api/StudentRegisterApi
+      dockerfile: Dockerfile
+    env_file: 
+      - ./Api/StudentRegisterApi/Env/mongo.env
+    environment: 
+      ASPNETCORE_ENVIRONMENT: Release
+      ASPNETCORE_URLS: https://+:443;http://+:80
+      NUGET_PACKAGES: /root/.nuget/fallbackpackages2
+    depends_on:
+      - mongo
+
+volumes: 
+  data:
