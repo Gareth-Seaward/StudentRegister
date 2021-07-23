@@ -3,6 +3,8 @@ services:
 
   mongo:
     image: mongo
+    container_name: studentregister-mongo
+    hostname: studentregister-mongo
     volumes:
       - data:/data/db
     env_file:
@@ -25,10 +27,8 @@ services:
       dockerfile: Dockerfile
     env_file: 
       - ./Api/StudentRegisterApi/Env/mongo.env
-    environment: 
-      ASPNETCORE_ENVIRONMENT: Release
-      ASPNETCORE_URLS: https://+:443;http://+:80
-      NUGET_PACKAGES: /root/.nuget/fallbackpackages2
+    ports:
+      - 5000:80
     depends_on:
       - mongo
 
